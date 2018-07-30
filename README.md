@@ -8,9 +8,7 @@ I was inspired to do this after using the onenote package crydid created that co
 http://www.cryrid.com/digitaldnd/.
 
 Requirements:
-
 Microsoft OneNote
-
 Notepad++ (or any editor)
 
 Steps to import monsters:
