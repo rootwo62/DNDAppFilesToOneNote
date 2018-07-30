@@ -25,13 +25,37 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Spells")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Development")]
+        public string Notebook {
+            get {
+                return ((string)(this["Notebook"]));
+            }
+            set {
+                this["Notebook"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Races")]
         public string OneNoteSection {
             get {
                 return ((string)(this["OneNoteSection"]));
             }
             set {
                 this["OneNoteSection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("race")]
+        public string BlockType {
+            get {
+                return ((string)(this["BlockType"]));
+            }
+            set {
+                this["BlockType"] = value;
             }
         }
         
@@ -49,18 +73,6 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Development")]
-        public string Notebook {
-            get {
-                return ((string)(this["Notebook"]));
-            }
-            set {
-                this["Notebook"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Monster Block (Normal)")]
         public string MonsterBlockTemplate {
             get {
@@ -68,18 +80,6 @@ namespace DNDtoON.Properties {
             }
             set {
                 this["MonsterBlockTemplate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("spell")]
-        public string BlockType {
-            get {
-                return ((string)(this["BlockType"]));
-            }
-            set {
-                this["BlockType"] = value;
             }
         }
         
@@ -104,6 +104,30 @@ namespace DNDtoON.Properties {
             }
             set {
                 this["SpellBlockTemplate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Races.xml")]
+        public string RacesFile {
+            get {
+                return ((string)(this["RacesFile"]));
+            }
+            set {
+                this["RacesFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Races Block (Normal)")]
+        public string RaceBlockTemplate {
+            get {
+                return ((string)(this["RaceBlockTemplate"]));
+            }
+            set {
+                this["RaceBlockTemplate"] = value;
             }
         }
     }

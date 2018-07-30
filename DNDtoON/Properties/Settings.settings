@@ -2,26 +2,32 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DNDtoON.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
+    <Setting Name="Notebook" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Development</Value>
+    </Setting>
     <Setting Name="OneNoteSection" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Spells</Value>
+      <Value Profile="(Default)">Races</Value>
+    </Setting>
+    <Setting Name="BlockType" Type="System.String" Scope="User">
+      <Value Profile="(Default)">race</Value>
     </Setting>
     <Setting Name="BestiaryFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">Storm King's Thunder Bestiary 1.1.0.xml</Value>
     </Setting>
-    <Setting Name="Notebook" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Development</Value>
-    </Setting>
     <Setting Name="MonsterBlockTemplate" Type="System.String" Scope="User">
       <Value Profile="(Default)">Monster Block (Normal)</Value>
-    </Setting>
-    <Setting Name="BlockType" Type="System.String" Scope="User">
-      <Value Profile="(Default)">spell</Value>
     </Setting>
     <Setting Name="SpellsFile" Type="System.String" Scope="User">
       <Value Profile="(Default)">PHB Spells 3.9.0.xml</Value>
     </Setting>
     <Setting Name="SpellBlockTemplate" Type="System.String" Scope="User">
       <Value Profile="(Default)">Spell Block (Normal)</Value>
+    </Setting>
+    <Setting Name="RacesFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Races.xml</Value>
+    </Setting>
+    <Setting Name="RaceBlockTemplate" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Races Block (Normal)</Value>
     </Setting>
   </Settings>
 </SettingsFile>
