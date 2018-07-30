@@ -26,4 +26,4 @@ Steps to import monsters:
   - **BlockType:** monster
 - Output pages should look like https://imgur.com/a/dVMrowW.
 
-_supported BlockTypes: monster, spell, race
+_supported BlockTypes: monster, spell, race_
