@@ -25,3 +25,5 @@ Steps to import monsters:
   - **MonsterBlockTemplate:** Monster Block (Normal)
   - **BlockType:** monster
 - Output pages should look like https://imgur.com/a/dVMrowW.
+
+_supported BlockTypes: monster, spell, race
