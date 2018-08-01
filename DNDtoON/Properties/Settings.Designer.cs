@@ -25,7 +25,7 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Development")]
+        [global::System.Configuration.DefaultSettingValueAttribute("DND Notebook")]
         public string Notebook {
             get {
                 return ((string)(this["Notebook"]));
@@ -109,7 +109,7 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Races.xml")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Orc.xml")]
         public string RacesFile {
             get {
                 return ((string)(this["RacesFile"]));
@@ -121,13 +121,61 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Races Block (Normal)")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Race Block (Normal)")]
         public string RaceBlockTemplate {
             get {
                 return ((string)(this["RaceBlockTemplate"]));
             }
             set {
                 this["RaceBlockTemplate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("UA Feats.xml")]
+        public string FeatsFile {
+            get {
+                return ((string)(this["FeatsFile"]));
+            }
+            set {
+                this["FeatsFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Feat Block (Normal)")]
+        public string FeatBlockTemplate {
+            get {
+                return ((string)(this["FeatBlockTemplate"]));
+            }
+            set {
+                this["FeatBlockTemplate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Backgrounds.xml")]
+        public string BackgroundsFile {
+            get {
+                return ((string)(this["BackgroundsFile"]));
+            }
+            set {
+                this["BackgroundsFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Background Block (Normal)")]
+        public string BackgroundBlockTemplate {
+            get {
+                return ((string)(this["BackgroundBlockTemplate"]));
+            }
+            set {
+                this["BackgroundBlockTemplate"] = value;
             }
         }
     }

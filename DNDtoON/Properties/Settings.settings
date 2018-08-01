@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="Notebook" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Development</Value>
+      <Value Profile="(Default)">DND Notebook</Value>
     </Setting>
     <Setting Name="OneNoteSection" Type="System.String" Scope="User">
       <Value Profile="(Default)">Races</Value>
@@ -24,10 +24,22 @@
       <Value Profile="(Default)">Spell Block (Normal)</Value>
     </Setting>
     <Setting Name="RacesFile" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Races.xml</Value>
+      <Value Profile="(Default)">Orc.xml</Value>
     </Setting>
     <Setting Name="RaceBlockTemplate" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Races Block (Normal)</Value>
+      <Value Profile="(Default)">Race Block (Normal)</Value>
+    </Setting>
+    <Setting Name="FeatsFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">UA Feats.xml</Value>
+    </Setting>
+    <Setting Name="FeatBlockTemplate" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Feat Block (Normal)</Value>
+    </Setting>
+    <Setting Name="BackgroundsFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Backgrounds.xml</Value>
+    </Setting>
+    <Setting Name="BackgroundBlockTemplate" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Background Block (Normal)</Value>
     </Setting>
   </Settings>
 </SettingsFile>

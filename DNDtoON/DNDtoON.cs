@@ -24,7 +24,10 @@ namespace DNDtoON
 
         string monsterblocktemplatefile, monsterblockpagename, MonsterBlockPageID, bestiaryFile;
         string spellblocktemplatefile, spellblockpagename, SpellBlockPageID, spellsFile;
-        string raceblocktemplatefile, raceblockpagename, RaceBlockPageID, racesFile;
+        string raceblockfiletemplate, raceblockpagename, RaceBlockPageID, racesFile;
+        string featblocktemplatefile, featblockpagename, FeatBlockPageID, featsFile;
+        string backgroundtemplatefile, backgroundblockpagename, BackGroundBlockPageID, backgroundsFile;
+
 
         static void Main(string[] args)
         {
@@ -86,7 +89,46 @@ namespace DNDtoON
                     Load.FillRaceTable(Race, RacePageID);
                 }
             }
+            if (Properties.Settings.Default.BlockType == "feat")
+            {
+                Load.GetFeatTableXML();
+                XmlDocument FeatXMLDoc = new XmlDocument();
+                FeatXMLDoc.Load(Load.featsFile);
 
+                XmlNodeList Feats = FeatXMLDoc.SelectNodes("//feat");
+
+                int i = 0;
+
+                foreach (XmlNode Feat in Feats)
+                {
+                    i++;
+                    //if (i > 1)
+                    //    break;
+                    Console.WriteLine("adding {0} to {1}", Feat.SelectSingleNode("name").InnerText, Load.sectionname);
+                    Load.CopyFeatTableTemplate(Feat.SelectSingleNode("name").InnerText.Replace("(UA)", "").Trim(), out string FeatPageID);
+                    Load.FillFeatTable(Feat, FeatPageID);
+                }
+            }
+            if (Properties.Settings.Default.BlockType == "background")
+            {
+                Load.GetBackgroundTableXML();
+                XmlDocument BackgroundXMLDoc = new XmlDocument();
+                BackgroundXMLDoc.Load(Load.backgroundsFile);
+
+                XmlNodeList Backgrounds = BackgroundXMLDoc.SelectNodes("//background");
+
+                int i = 0;
+
+                foreach (XmlNode Background in Backgrounds)
+                {
+                    i++;
+                    //if (i > 1)
+                    //    break;
+                    Console.WriteLine("adding {0} to {1}", Background.SelectSingleNode("name").InnerText, Load.sectionname);
+                    Load.CopyPageTableTemplate(Background.SelectSingleNode("name").InnerText, "backgroundblocktemplate.xml", out string BackgroundPagedID);
+                    Load.FillBackgroundTable(Background, BackgroundPagedID);
+                }
+            }
             Console.WriteLine("press any key to close...");
             Console.ReadKey(true);
         }
@@ -230,7 +272,7 @@ namespace DNDtoON
             notebooksxmlfile = "notebooks.xml";
             sectionsxmlfile = "sections.xml";
             pagesxmlfile = "pages.xml";
-            raceblocktemplatefile = "raceblocktemplate.xml";
+            raceblockfiletemplate = "raceblocktemplate.xml";
 
             GetONHeierarchy("", OneNote.HierarchyScope.hsNotebooks, notebooksxmlfile);
             notebookID = ID(notebooksxmlfile, notebookName);
@@ -243,7 +285,63 @@ namespace DNDtoON
 
             OneNoteApp.GetHierarchy(RaceBlockPageID, OneNote.HierarchyScope.hsChildren, out string RaceBlockPageName);
 
-            XDocument.Parse(RaceBlockPageName).Save(raceblocktemplatefile);
+            XDocument.Parse(RaceBlockPageName).Save(raceblockfiletemplate);
+
+        }
+
+        private void GetFeatTableXML()
+        {
+
+            featsFile = Properties.Settings.Default.FeatsFile;
+            featblockpagename = Properties.Settings.Default.FeatBlockTemplate;
+            sectionname = Properties.Settings.Default.OneNoteSection;
+            notebookName = Properties.Settings.Default.Notebook;
+
+            notebooksxmlfile = "notebooks.xml";
+            sectionsxmlfile = "sections.xml";
+            pagesxmlfile = "pages.xml";
+            featblocktemplatefile = "featblocktemplate.xml";
+
+            GetONHeierarchy("", OneNote.HierarchyScope.hsNotebooks, notebooksxmlfile);
+            notebookID = ID(notebooksxmlfile, notebookName);
+
+            GetONHeierarchy(notebookID, OneNote.HierarchyScope.hsSections, sectionsxmlfile);
+            sectionID = ID(sectionsxmlfile, sectionname);
+
+            GetONHeierarchy(sectionID, OneNote.HierarchyScope.hsPages, pagesxmlfile);
+            FeatBlockPageID = ID(pagesxmlfile, featblockpagename);
+
+            OneNoteApp.GetHierarchy(FeatBlockPageID, OneNote.HierarchyScope.hsChildren, out string FeatBlockPageName);
+
+            XDocument.Parse(FeatBlockPageName).Save(featblocktemplatefile);
+
+        }
+
+        private void GetBackgroundTableXML()
+        {
+
+            backgroundsFile = Properties.Settings.Default.BackgroundsFile;
+            backgroundblockpagename = Properties.Settings.Default.BackgroundBlockTemplate;
+            sectionname = Properties.Settings.Default.OneNoteSection;
+            notebookName = Properties.Settings.Default.Notebook;
+
+            notebooksxmlfile = "notebooks.xml";
+            sectionsxmlfile = "sections.xml";
+            pagesxmlfile = "pages.xml";
+            backgroundtemplatefile = "backgroundblocktemplate.xml";
+
+            GetONHeierarchy("", OneNote.HierarchyScope.hsNotebooks, notebooksxmlfile);
+            notebookID = ID(notebooksxmlfile, notebookName);
+
+            GetONHeierarchy(notebookID, OneNote.HierarchyScope.hsSections, sectionsxmlfile);
+            sectionID = ID(sectionsxmlfile, sectionname);
+
+            GetONHeierarchy(sectionID, OneNote.HierarchyScope.hsPages, pagesxmlfile);
+            BackGroundBlockPageID = ID(pagesxmlfile, backgroundblockpagename);
+
+            OneNoteApp.GetHierarchy(BackGroundBlockPageID, OneNote.HierarchyScope.hsChildren, out string BackgroundBlockPageName);
+
+            XDocument.Parse(BackgroundBlockPageName).Save(backgroundtemplatefile);
 
         }
 
@@ -413,7 +511,7 @@ namespace DNDtoON
             //XDocument.Parse(NewPageXML).Save("test2.xml");
 
             XmlDocument RaceBlockDocument = new XmlDocument();
-            RaceBlockDocument.Load(raceblocktemplatefile);
+            RaceBlockDocument.Load(raceblockfiletemplate);
             XmlNode TableElement = RaceBlockDocument.SelectSingleNode("//one:Table", XMLMGR(RaceBlockDocument));
 
             XmlDocument xmldoc = new XmlDocument();
@@ -478,7 +576,164 @@ namespace DNDtoON
 
         }
 
+        private void CopyFeatTableTemplate(string FeatName, out string pageID)
+        {
+            string URI = "http://schemas.microsoft.com/office/onenote/2013/onenote";
+
+            OneNoteApp.CreateNewPage(sectionID, out pageID);
+            OneNoteApp.GetPageContent(pageID, out string NewPageXML);
+
+            //XDocument.Parse(NewPageXML).Save("test2.xml");
+
+            XmlDocument FeatBlockDocument = new XmlDocument();
+            FeatBlockDocument.Load(featblocktemplatefile);
+            XmlNode TableElement = FeatBlockDocument.SelectSingleNode("//one:Table", XMLMGR(FeatBlockDocument));
+
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.LoadXml(NewPageXML);
+            XmlNode PageXML = xmldoc.SelectSingleNode("//one:Page", XMLMGR(xmldoc));
+
+            XmlNode Outline = xmldoc.CreateElement("one:Outline", URI);
+            XmlNode Position = xmldoc.CreateElement("one:Position", URI);
+            XmlNode Size = xmldoc.CreateElement("one:Size", URI);
+            XmlNode OEChildren = xmldoc.CreateElement("one:OEChildren", URI);
+            XmlNode OE = xmldoc.CreateElement("one:OE", URI);
+
+            //XmlNode OEChildren = xmldoc.CreateElement("one:Outline", URI);
+
+            XmlAttribute OutlineXMLNS = xmldoc.CreateAttribute("xmlns:one");
+
+            OutlineXMLNS.Value = URI;
+
+            Outline.Attributes.Append(OutlineXMLNS);
+
+            XmlAttribute OutlinePositionx = xmldoc.CreateAttribute("x");
+            XmlAttribute OutlinePositiony = xmldoc.CreateAttribute("y");
+            XmlAttribute OutlinePositionz = xmldoc.CreateAttribute("z");
+
+            OutlinePositionx.Value = "36.0";
+            OutlinePositiony.Value = "86.4000015258789";
+            OutlinePositionz.Value = "0";
+
+            Position.Attributes.Append(OutlinePositionx);
+            Position.Attributes.Append(OutlinePositiony);
+            Position.Attributes.Append(OutlinePositionz);
+
+            XmlAttribute OutlineSizeWidth = xmldoc.CreateAttribute("width");
+            XmlAttribute OutlineSizeHeight = xmldoc.CreateAttribute("height");
+
+            OutlineSizeWidth.Value = "260.3399963378906";
+            OutlineSizeHeight.Value = "347.3149719238281";
+
+            Size.Attributes.Append(OutlineSizeHeight);
+            Size.Attributes.Append(OutlineSizeWidth);
+
+            XmlNode importNode = xmldoc.ImportNode(TableElement, true);
+
+            OE.AppendChild(importNode);
+            OEChildren.AppendChild(OE);
+            PageXML.AppendChild(Outline);
+            Outline.AppendChild(Position);
+            Outline.AppendChild(Size);
+            Outline.AppendChild(OEChildren);
+
+            xmldoc.SelectSingleNode("//one:Title//one:T", XMLMGR(xmldoc)).InnerText = FeatName;
+
+            //PageXML.AppendChild(importNode);
+
+            //xmldoc.SelectSingleNode("//one:Outline/@objectID", XMLMGR(xmldoc)).InnerXml = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
+
+            //xmldoc.Save("test.xml");
+            //Console.WriteLine(xmldoc.OuterXml);
+            //OneNoteApp.UpdateHierarchy(xmldoc.OuterXml);
+            OneNoteApp.UpdatePageContent(xmldoc.OuterXml);
+            OneNoteApp.SyncHierarchy(sectionID);
+
+        }
+
+        private void CopyPageTableTemplate(string OutPutName, string TemplateToLoad, out string pageID)
+        {
+            string URI = "http://schemas.microsoft.com/office/onenote/2013/onenote";
+
+            OneNoteApp.CreateNewPage(sectionID, out pageID);
+            OneNoteApp.GetPageContent(pageID, out string NewPageXML);
+
+            //XDocument.Parse(NewPageXML).Save("test2.xml");
+
+            XmlDocument XMLDOCUMENT = new XmlDocument();
+            XMLDOCUMENT.Load(TemplateToLoad);
+            XmlNode TableElement = XMLDOCUMENT.SelectSingleNode("//one:Table", XMLMGR(XMLDOCUMENT));
+
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.LoadXml(NewPageXML);
+            XmlNode PageXML = xmldoc.SelectSingleNode("//one:Page", XMLMGR(xmldoc));
+
+            XmlNode Outline = xmldoc.CreateElement("one:Outline", URI);
+            XmlNode Position = xmldoc.CreateElement("one:Position", URI);
+            XmlNode Size = xmldoc.CreateElement("one:Size", URI);
+            XmlNode OEChildren = xmldoc.CreateElement("one:OEChildren", URI);
+            XmlNode OE = xmldoc.CreateElement("one:OE", URI);
+
+            //XmlNode OEChildren = xmldoc.CreateElement("one:Outline", URI);
+
+            XmlAttribute OutlineXMLNS = xmldoc.CreateAttribute("xmlns:one");
+
+            OutlineXMLNS.Value = URI;
+
+            Outline.Attributes.Append(OutlineXMLNS);
+
+            XmlAttribute OutlinePositionx = xmldoc.CreateAttribute("x");
+            XmlAttribute OutlinePositiony = xmldoc.CreateAttribute("y");
+            XmlAttribute OutlinePositionz = xmldoc.CreateAttribute("z");
+
+            OutlinePositionx.Value = "36.0";
+            OutlinePositiony.Value = "86.4000015258789";
+            OutlinePositionz.Value = "0";
+
+            Position.Attributes.Append(OutlinePositionx);
+            Position.Attributes.Append(OutlinePositiony);
+            Position.Attributes.Append(OutlinePositionz);
+
+            XmlAttribute OutlineSizeWidth = xmldoc.CreateAttribute("width");
+            XmlAttribute OutlineSizeHeight = xmldoc.CreateAttribute("height");
+
+            OutlineSizeWidth.Value = "260.3399963378906";
+            OutlineSizeHeight.Value = "347.3149719238281";
+
+            Size.Attributes.Append(OutlineSizeHeight);
+            Size.Attributes.Append(OutlineSizeWidth);
+
+            XmlNode importNode = xmldoc.ImportNode(TableElement, true);
+
+            OE.AppendChild(importNode);
+            OEChildren.AppendChild(OE);
+            PageXML.AppendChild(Outline);
+            Outline.AppendChild(Position);
+            Outline.AppendChild(Size);
+            Outline.AppendChild(OEChildren);
+
+            xmldoc.SelectSingleNode("//one:Title//one:T", XMLMGR(xmldoc)).InnerText = OutPutName;
+
+            //PageXML.AppendChild(importNode);
+
+            //xmldoc.SelectSingleNode("//one:Outline/@objectID", XMLMGR(xmldoc)).InnerXml = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
+
+            //xmldoc.Save("test.xml");
+            //Console.WriteLine(xmldoc.OuterXml);
+            //OneNoteApp.UpdateHierarchy(xmldoc.OuterXml);
+            OneNoteApp.UpdatePageContent(xmldoc.OuterXml);
+            OneNoteApp.SyncHierarchy(sectionID);
+
+        }
+
         // Fill Tables
+
+        const string font = @"<span style = 'font-size:9pt; font-family:cambria'>";
+        const string boldfont = @"<span style = 'font-weight:bold; font-size:9pt; font-family:cambria'>";
+        const string boldname = @"<span style = 'font-weight:bold; font-size:12pt; font-family:cambria'>";
+        const string italicfont = @"<span style='font-style:italic; font-size:9pt; font-family:cambria'>";
+        const string bolditalicfont = @"<span style='font-style:italic; font-weight:bold; font-size:9pt; font-family:cambria'>";
+        const string endspan = @"</span>";
 
         private void FillMonsterStatsTable(XmlNode Monster, string MonsterPageID)
         {
@@ -522,26 +777,21 @@ namespace DNDtoON
 
             size = MonsterSize(size);
 
-            var font = @"<span style = 'font-size:9pt' 'font-family:cambria'>";
-            var bold = @"<span style = 'font-weight:bold' 'font-size:9pt'>";
-            var italic = @"<span style='font-style:italic'>";
-            var endspan = @"</span>";
-
             // name
             if (name != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[name]')]", XNSMGR).InnerText = bold + name + endspan;
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[name]')]", XNSMGR).InnerText = boldname + name + endspan;
             // size
             if (size != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[size]')]", XNSMGR).InnerText = italic + size + ", " + type + ", " + alignment + endspan;
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[size]')]", XNSMGR).InnerText = italicfont + size + ", " + type + ", " + alignment + endspan;
             // armor class
             if (ac != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[ac]')]", XNSMGR).InnerText = bold + @"Armor Class: " + endspan + ac;
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[ac]')]", XNSMGR).InnerText = boldfont + @"Armor Class: " + endspan + ac;
             // hit points
             if (hp != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[hp]')]", XNSMGR).InnerText = bold + @"Hit Points: " + endspan + hp;
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[hp]')]", XNSMGR).InnerText = boldfont + @"Hit Points: " + endspan + hp;
             // speed
             if (speed != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[speed]')]", XNSMGR).InnerText = bold + @"Speed: " + endspan + speed;
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[speed]')]", XNSMGR).InnerText = boldfont + @"Speed: " + endspan + speed;
             // strength
             if (strength != null)
                 MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[str]')]", XNSMGR).InnerText = strength;
@@ -561,15 +811,15 @@ namespace DNDtoON
             if (charisma != null)
                 MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[cha]')]", XNSMGR).InnerText = charisma;
             // saving throws
-            if (save != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[saving throws]')]", XNSMGR).InnerText = bold + @"Saving Throws: " + endspan + save;
+            if (save != null & save != "")
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[saving throws]')]", XNSMGR).InnerText = boldfont + @"Saving Throws: " + endspan + save;
             else
             {
                 XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[saving throws]')]", XNSMGR);
                 node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
             }
             // skills
-            if (skill != null)
+            if (skill != null & skill != "")
                 MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[skill]')]", XNSMGR).InnerText = skill;
             else
             {
@@ -577,56 +827,56 @@ namespace DNDtoON
                 node.ParentNode.ParentNode.ParentNode.ParentNode.ParentNode.RemoveChild(node.ParentNode.ParentNode.ParentNode.ParentNode);
             }
             // resist
-            if (resist != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[resist]')]", XNSMGR).InnerText = bold + @"Resistance: " + endspan + resist;
+            if (resist != null & resist != "")
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[resist]')]", XNSMGR).InnerText = boldfont + @"Resistance: " + endspan + resist;
             else
             {
                 XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[resist]')]", XNSMGR);
                 node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
             }
             // immune
-            if (immune != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[immune]')]", XNSMGR).InnerText = bold + @"Damage Immunities: " + endspan + immune;
+            if (immune != null & immune != "")
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[immune]')]", XNSMGR).InnerText = boldfont + @"Damage Immunities: " + endspan + immune;
             else
             {
                 XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[immune]')]", XNSMGR);
                 node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
             }
             // condition immunities
-            if (conditionimmune != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[condition immunities]')]", XNSMGR).InnerText = bold + @"Condition Immunities: " + endspan + conditionimmune;
+            if (conditionimmune != null & conditionimmune != "")
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[condition immunities]')]", XNSMGR).InnerText = boldfont + @"Condition Immunities: " + endspan + conditionimmune;
             else
             {
                 XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[condition immunities]')]", XNSMGR);
                 node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
             }
             // passive
-            if (passive != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[passive]')]", XNSMGR).InnerText = bold + @"Passive Perception: " + endspan + passive;
+            if (passive != null & passive != "")
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[passive]')]", XNSMGR).InnerText = boldfont + @"Passive Perception: " + endspan + passive;
             else
             {
                 XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[passive]')]", XNSMGR);
                 node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
             }
             // senses
-            if (senses != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[senses]')]", XNSMGR).InnerText = bold + @"Senses: " + endspan + senses;
+            if (senses != null & senses != "")
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[senses]')]", XNSMGR).InnerText = boldfont + @"Senses: " + endspan + senses;
             else
             {
                 XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[senses]')]", XNSMGR);
                 node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
             }
             // languages
-            if (languages != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[languages]')]", XNSMGR).InnerText = bold + @"Languages: " + endspan + languages;
+            if (languages != null & languages != "")
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[languages]')]", XNSMGR).InnerText = boldfont + @"Languages: " + endspan + languages;
             else
             {
                 XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[languages]')]", XNSMGR);
                 node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
             }
             // challenge rating
-            if (cr != null)
-                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[cr]')]", XNSMGR).InnerText = bold + @"Challenge: " + endspan + cr;
+            if (cr != null & cr != "")
+                MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[cr]')]", XNSMGR).InnerText = boldfont + @"Challenge: " + endspan + cr;
             else
             {
                 XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[cr]')]", XNSMGR);
@@ -636,7 +886,7 @@ namespace DNDtoON
             if (enviornment != null)
                 MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[environment]')]", XNSMGR).InnerText = enviornment;
             // spells
-            if (spells != null)
+            if (spells != null & spells != "")
                 MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[spells]')]", XNSMGR).InnerText = spells;
             else
             {
@@ -676,7 +926,7 @@ namespace DNDtoON
                 node.ParentNode.ParentNode.ParentNode.ParentNode.ParentNode.RemoveChild(node.ParentNode.ParentNode.ParentNode.ParentNode);
             }
             // legendary
-            if (Monster.SelectSingleNode("legendary") != null)
+            if (legendary != null & legendary != "")
             {
                 XmlNodeList nodelistlegendary = Monster.SelectNodes("legendary");
                 XmlNode nodelegendary = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[legendary]')]", XNSMGR).ParentNode.ParentNode;
@@ -694,6 +944,7 @@ namespace DNDtoON
 
             try
             {
+                MonsterPageXMLDoc.SelectSingleNode("//one:Outline/one:Size/@width", XNSMGR).InnerXml = "400";
                 OneNoteApp.UpdatePageContent(MonsterPageXMLDoc.OuterXml);
             }
             catch (Exception ex)
@@ -738,34 +989,29 @@ namespace DNDtoON
             else
                 level = "Level " + level;
 
-            var font = @"<span style = 'font-size:9pt' 'font-family:cambria'>";
-            var bold = @"<span style = 'font-weight:bold' 'font-size:9pt'>";
-            var italic = @"<span style='font-style:italic'>";
-            var endspan = @"</span>";
-
             // name
-            if (name != null)
-                SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[name]')]", XNSMGR).InnerText = bold + name + endspan;
+            if (name != null & name != "")
+                SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[name]')]", XNSMGR).InnerText = boldname + name + endspan;
             // school
-            if (school != null)
-                SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[school]')]", XNSMGR).InnerText = italic + level + ", " + school + endspan;
+            if (school != null & school != "")
+                SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[school]')]", XNSMGR).InnerText = italicfont + level + ", " + school + endspan;
             // level
             //if (level != null)
             //    SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[level]')]", XNSMGR).InnerText = level;
             // time
-            if (time != null)
-                SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[time]')]", XNSMGR).InnerText = bold + "Time to Cast: " + endspan + time;
+            if (time != null & time != "")
+                SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[time]')]", XNSMGR).InnerText = boldfont + "Time to Cast: " + endspan + time;
             // range
-            if (range != null)
-                SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[range]')]", XNSMGR).InnerText = bold + "Spell Range: " + endspan + range;
+            if (range != null & range != "")
+                SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[range]')]", XNSMGR).InnerText = boldfont + "Spell Range: " + endspan + range;
             // components
-            if (components != null)
-                SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[components]')]", XNSMGR).InnerText = bold + "Components: " + endspan + components;
+            if (components != null & components != "")
+                SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[components]')]", XNSMGR).InnerText = boldfont + "Components: " + endspan + components;
             // duration
-            if (duration != null)
-                SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[duration]')]", XNSMGR).InnerText = bold + "Cast Time: " + endspan + duration;
+            if (duration != null & duration != "")
+                SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[duration]')]", XNSMGR).InnerText = boldfont + "Cast Time: " + endspan + duration;
             // description
-            if (description != null)
+            if (description != null & description != "")
             {
                 string DescriptionText = "";
                 XmlNodeList DescriptionElements = Spell.SelectNodes("text");
@@ -788,7 +1034,7 @@ namespace DNDtoON
             }
 
             // classes
-            if (classes != null)
+            if (classes != null & classes != "")
                 SpellPageDocument.SelectSingleNode("//one:T[contains(text(), '[classes]')]", XNSMGR).InnerText = classes;
             // roll
             //if (roll != null)
@@ -815,6 +1061,7 @@ namespace DNDtoON
 
             try
             {
+                SpellPageDocument.SelectSingleNode("//one:Outline/one:Size/@width", XNSMGR).InnerXml = "400";
                 OneNoteApp.UpdatePageContent(SpellPageDocument.OuterXml);
             }
             catch (Exception ex)
@@ -847,18 +1094,27 @@ namespace DNDtoON
             string trait = Race.SelectSingleNode("trait")?.InnerText;
             string proficiency = Race.SelectSingleNode("proficiency")?.InnerText;
 
-            var font = @"<span style = 'font-size:9pt; font-family:cambria'>";
-            var bold = @"<span style = 'font-weight:bold; font-size:11pt; font-family:cambria'>";
-            var italic = @"<span style='font-style:italic; font-size:9pt; font-family:cambria'>";
-            var endspan = @"</span>";
+            size = MonsterSize(size);
 
             // name
             if (name != null)
-                RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[name]')]", XNSMGR).InnerText = name;
-            if (size != null & speed != null)
-                RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[size speed]')]", XNSMGR).InnerText = size + " | " + speed;
-            if (ability != null)
-                RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[ability]')]", XNSMGR).InnerText = bold + "Abilities: " + endspan + ability;
+                RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[name]')]", XNSMGR).InnerText = boldname + name + endspan;
+            if (size != null & size != "")
+                RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[size]')]", XNSMGR).InnerText = boldfont + "Size: " + endspan + size;
+            else
+            {
+                XmlNode node = RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[size]')]", XNSMGR);
+                node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
+            }
+            if (speed != null & speed != "")
+                RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[speed]')]", XNSMGR).InnerText = boldfont + "Speed: " + endspan + speed;
+            else
+            {
+                XmlNode node = RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[speed]')]", XNSMGR);
+                node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
+            }
+            if (ability != null & ability != "")
+                RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[ability]')]", XNSMGR).InnerText = boldfont + "Abilities: " + endspan + ability;
             else
             {
                 XmlNode node = RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[ability]')]", XNSMGR);
@@ -878,7 +1134,7 @@ namespace DNDtoON
                             if (childnode.InnerText != "")
                             {
                                 if (childnode.Name == "name")
-                                    objstring += bold + childnode.InnerText + "." + endspan + Environment.NewLine;
+                                    objstring += boldfont + childnode.InnerText + "." + endspan + Environment.NewLine;
                                 else if (childnode.Name == "text")
                                     objstring += childnode.InnerText + Environment.NewLine + Environment.NewLine;
                             }
@@ -889,27 +1145,104 @@ namespace DNDtoON
                 RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[traits]')]", XNSMGR).InnerText = objstring;
             }
             if (proficiency != null)
-                RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[proficiency]')]", XNSMGR).InnerText = bold + "Proficiencies: " + endspan + proficiency;
+                RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[proficiency]')]", XNSMGR).InnerText = boldfont + "Proficiencies: " + endspan + proficiency;
             else
             {
                 XmlNode node = RacePageDocument.SelectSingleNode("//one:T[contains(text(), '[proficiency]')]", XNSMGR);
-                if (ability == null)
-                {
-                    // remove the entire row
-                    node.ParentNode.ParentNode.ParentNode.ParentNode.ParentNode.RemoveChild(node.ParentNode.ParentNode.ParentNode.ParentNode);
-                }
-                else
-                {
-                    // remove only the proficiency text
-                    node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
-                }
+                node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
+            }
+
+            try
+            {
+                RacePageDocument.SelectSingleNode("//one:Outline/one:Size/@width", XNSMGR).InnerXml = "400";
+                OneNoteApp.UpdatePageContent(RacePageDocument.OuterXml);
+            }
+            catch (Exception ex)
+            {
+                //XDocument.Parse(RacePageDocument.OuterXml).Save("errors/" + name + "-onenote.xml");
+                //XDocument.Parse(Race.OuterXml).Save("errors/" + name + "-race.xml");
+                Console.WriteLine("failed to update {0}", name);
+                Console.WriteLine(ex.Message);
             }
 
 
 
+
+            OneNoteApp.SyncHierarchy(sectionID);
+
+        }
+
+        private void FillFeatTable(XmlNode Feat, string FeatPageID)
+        {
+            OneNoteApp.GetHierarchy(FeatPageID, OneNote.HierarchyScope.hsChildren, out string CurrentFeatPage);
+            string URI = "http://schemas.microsoft.com/office/onenote/2013/onenote";
+
+            XmlDocument FeatPageDocument = new XmlDocument();
+            FeatPageDocument.LoadXml(CurrentFeatPage);
+            XmlNamespaceManager XNSMGR = XMLMGR(FeatPageDocument);
+
+            // single child nodes
+            string name = Feat.SelectSingleNode("name")?.InnerText;
+            string modifier = Feat.SelectSingleNode("modifier")?.InnerText;
+            string prerequisites = Feat.SelectSingleNode("prerequisite")?.InnerText;
+            string description = Feat.SelectSingleNode("text")?.InnerText;
+
+            if (name.Contains("(UA)"))
+                name = name.Replace("(UA)", "").Trim();
+
+            // name
+            if (name != null & name != "")
+                FeatPageDocument.SelectSingleNode("//one:T[contains(text(), '[name]')]", XNSMGR).InnerText = boldname + name + endspan;
+
+            if (modifier != null & modifier != "")
+                FeatPageDocument.SelectSingleNode("//one:T[contains(text(), '[modifier]')]", XNSMGR).InnerText = bolditalicfont + "Modifier/s: " + endspan + italicfont + modifier + endspan;
+            else
+            {
+                XmlNode node = FeatPageDocument.SelectSingleNode("//one:T[contains(text(), '[modifier]')]", XNSMGR);
+                node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
+            }
+
+            if (prerequisites != null & prerequisites != "")
+                FeatPageDocument.SelectSingleNode("//one:T[contains(text(), '[prerequisites]')]", XNSMGR).InnerText = boldfont + "Prerequisites: " + endspan + prerequisites;
+            else
+            {
+                XmlNode node = FeatPageDocument.SelectSingleNode("//one:T[contains(text(), '[prerequisites]')]", XNSMGR);
+                node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
+            }
+
+            if (description != null & description != "")
+            {
+                string objstring = "";
+                XmlNodeList elementlist = Feat.SelectNodes("text");
+                foreach (XmlNode node in elementlist)
+                {
+                    if (node.InnerText != "")
+                    {
+                        foreach (XmlNode childnode in node.ChildNodes)
+                        {
+                            if (childnode.InnerText != "")
+                            {
+                                if (childnode.InnerText.Contains("•"))
+                                    objstring += "   " + childnode.InnerText + Environment.NewLine;
+                                else
+                                    objstring += childnode.InnerText + Environment.NewLine;
+                            }
+                        }
+                    }
+                }
+
+                FeatPageDocument.SelectSingleNode("//one:T[contains(text(), '[description]')]", XNSMGR).InnerText = objstring;
+            }
+            else
+            {
+                XmlNode node = FeatPageDocument.SelectSingleNode("//one:T[contains(text(), '[description]')]", XNSMGR);
+                node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
+            }
+
             try
             {
-                OneNoteApp.UpdatePageContent(RacePageDocument.OuterXml);
+                FeatPageDocument.SelectSingleNode("//one:Outline/one:Size/@width", XNSMGR).InnerXml = "400";
+                OneNoteApp.UpdatePageContent(FeatPageDocument.OuterXml);
             }
             catch (Exception ex)
             {
@@ -924,6 +1257,71 @@ namespace DNDtoON
 
         }
 
+        private void FillBackgroundTable(XmlNode InputNode, string PageID)
+        {
+            OneNoteApp.GetHierarchy(PageID, OneNote.HierarchyScope.hsChildren, out string CurrentPage);
+            string URI = "http://schemas.microsoft.com/office/onenote/2013/onenote";
+
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.LoadXml(CurrentPage);
+            XmlNamespaceManager XNSMGR = XMLMGR(xmldoc);
+
+            // single child nodes
+            string name = InputNode.SelectSingleNode("name")?.InnerText;
+            string trait = InputNode.SelectSingleNode("trait")?.InnerText;
+            //string proficiency = InputNode.SelectSingleNode("proficiency")?.InnerText;
+
+            // name
+            if (name != null)
+                xmldoc.SelectSingleNode("//one:T[contains(text(), '[name]')]", XNSMGR).InnerText = boldname + name + endspan;
+
+            if (trait != null)
+            {
+                string objstring = "";
+                XmlNodeList elementlist = InputNode.SelectNodes("trait");
+                foreach (XmlNode node in elementlist)
+                {
+                    if (node.InnerText != "")
+                    {
+                        foreach (XmlNode childnode in node.ChildNodes)
+                        {
+                            if (childnode.InnerText != "")
+                            {
+                                if (childnode.Name == "name")
+                                    objstring += boldfont + childnode.InnerText + "." + endspan + Environment.NewLine;
+                                else if (childnode.Name == "text")
+                                    objstring += childnode.InnerText + Environment.NewLine + Environment.NewLine;
+                            }
+                        }
+                    }
+                }
+
+                xmldoc.SelectSingleNode("//one:T[contains(text(), '[traits]')]", XNSMGR).InnerText = objstring;
+            }
+            //if (proficiency != null)
+            //    xmldoc.SelectSingleNode("//one:T[contains(text(), '[proficiency]')]", XNSMGR).InnerText = bold + "Proficiencies: " + endspan + proficiency;
+            //else
+            //{
+            //    XmlNode node = xmldoc.SelectSingleNode("//one:T[contains(text(), '[proficiency]')]", XNSMGR);
+            //}
+
+            try
+            {
+                xmldoc.SelectSingleNode("//one:Outline/one:Size/@width", XNSMGR).InnerXml = "400";
+                OneNoteApp.UpdatePageContent(xmldoc.OuterXml);
+            }
+            catch (Exception ex)
+            {
+                //XDocument.Parse(RacePageDocument.OuterXml).Save("errors/" + name + "-onenote.xml");
+                //XDocument.Parse(Race.OuterXml).Save("errors/" + name + "-race.xml");
+                Console.WriteLine("failed to update {0}", name);
+                Console.WriteLine(ex.Message);
+            }
+
+            
+            OneNoteApp.SyncHierarchy(sectionID);
+
+        }
 
         // Functions
 
