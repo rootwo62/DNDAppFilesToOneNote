@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OneNote = Microsoft.Office.Interop.OneNote;
 using System.Xml;
-using System.Data;
-using System.IO;
 using System.Xml.Linq;
+using OneNote = Microsoft.Office.Interop.OneNote;
 
 
 namespace DNDtoON
@@ -41,7 +36,7 @@ namespace DNDtoON
         private void Run()
         {
 
-            string ElementsByName = Properties.Settings.Default.ElementsByName;
+            string NamedList = Properties.Settings.Default.NamedList;
             List<string> listofnames = new List<string> { };
             string blocktype = Properties.Settings.Default.BlockType;
             string templatexmlfile = blocktype + "templatefile.xml";
@@ -50,14 +45,14 @@ namespace DNDtoON
             xmldoc.Load(Properties.Settings.Default.DNDAppFileXML);
             XmlNodeList docnodes = null;
 
-            if (ElementsByName.StartsWith("[list]"))
+            if (NamedList != null | NamedList != "")
             {
                 Console.WriteLine("getting elements by name...");
                 try
                 {
-                    foreach (string name in ElementsByName.Split(','))
+                    foreach (string name in NamedList.Split(','))
                     {
-                        string nametoadd = name.Replace("[list]", "").Trim();
+                        string nametoadd = name.Trim();
                         listofnames.Add(nametoadd);
                         Console.WriteLine("added {0} to the list of names", nametoadd);
                     }
@@ -183,7 +178,7 @@ namespace DNDtoON
 
         private void GetOneNoteTableXML(string templatePageName, string outXMLFile)
         {
-            sectionname = Properties.Settings.Default.OneNoteSection;
+            sectionname = Properties.Settings.Default.Section;
             notebookName = Properties.Settings.Default.Notebook;
 
             notebooksxmlfile = "notebooks.xml";

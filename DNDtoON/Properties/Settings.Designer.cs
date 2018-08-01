@@ -38,12 +38,12 @@ namespace DNDtoON.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Feats")]
-        public string OneNoteSection {
+        public string Section {
             get {
-                return ((string)(this["OneNoteSection"]));
+                return ((string)(this["Section"]));
             }
             set {
-                this["OneNoteSection"] = value;
+                this["Section"] = value;
             }
         }
         
@@ -85,13 +85,13 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("[list] Alert, Medic")]
-        public string ElementsByName {
+        [global::System.Configuration.DefaultSettingValueAttribute("Alert, Medic")]
+        public string NamedList {
             get {
-                return ((string)(this["ElementsByName"]));
+                return ((string)(this["NamedList"]));
             }
             set {
-                this["ElementsByName"] = value;
+                this["NamedList"] = value;
             }
         }
     }

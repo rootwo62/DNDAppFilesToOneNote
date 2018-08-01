@@ -5,7 +5,7 @@
     <Setting Name="Notebook" Type="System.String" Scope="User">
       <Value Profile="(Default)">DND Notebook</Value>
     </Setting>
-    <Setting Name="OneNoteSection" Type="System.String" Scope="User">
+    <Setting Name="Section" Type="System.String" Scope="User">
       <Value Profile="(Default)">Feats</Value>
     </Setting>
     <Setting Name="BlockTemplatePageName" Type="System.String" Scope="User">
@@ -17,8 +17,8 @@
     <Setting Name="DNDAppFileXML" Type="System.String" Scope="User">
       <Value Profile="(Default)">Feats.xml</Value>
     </Setting>
-    <Setting Name="ElementsByName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">[list] Alert, Medic</Value>
+    <Setting Name="NamedList" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Alert, Medic</Value>
     </Setting>
   </Settings>
 </SettingsFile>
