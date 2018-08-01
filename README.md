@@ -25,7 +25,7 @@ Steps to import DNDAppFiles:
   - **BlockTemplatePageName:** Feat Block (Normal)
   - **BlockType:** feat
   - **DNDAppFileXML:** Feats.xml
-  - **NamedList** Actor, Alert
+  - **NamedList:** Actor, Alert
 - Output pages should look like https://imgur.com/a/dVMrowW.
 
 _supported BlockTypes: monster, spell, race, background, feat_
