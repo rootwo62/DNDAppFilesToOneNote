@@ -16,20 +16,22 @@ Requirements:
 
 Steps to import monsters:
 - Create a notebook in onenote called 'DND Notebook'.
-- Create a section called 'Monsters'.
-- Add a page called 'Monster Block (Normal).
-- Make a table that looks like https://imgur.com/a/C8nPxFk.
+- Create a section called 'Feats'.
+- Add a page called 'Feat Block (Normal).
+- Make a table that looks like [Feat Block Template](https://imgur.com/a/KuizSFr).
 - Update the app config file to reference the notebook, section, templatepage, and file to import.
   - **Notebook:** DND Notebook
-  - **Section:** Monsters
-  - **MonsterBlockTemplate:** Monster Block (Normal)
-  - **BlockType:** monster
-  - **BestiaryFile:** Monster Bestiary.xml
+  - **Section:** Feats
+  - **BlockTemplatePageName:** Feat Block (Normal)
+  - **BlockType:** feat
+  - **DNDAppFileXML:** Feats.xml
+  - **NamedList** Actor, Alert
 - Output pages should look like https://imgur.com/a/dVMrowW.
 
 _supported BlockTypes: monster, spell, race, background, feat_
+_leave __NamedList__ setting blank to get all items in xml document_
 
-Currently, the template table cells have to match the examples, the row order doesn't matter as much as the cell content.
+Currently, the template table cells have to match the examples, the row order doesn't matter as much as the values between the brackets.
 
 Template File Requirements:
 - [Race Block Template](https://imgur.com/a/2iQF0f1)
