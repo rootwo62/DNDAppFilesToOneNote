@@ -37,7 +37,7 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Races")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Feats")]
         public string OneNoteSection {
             get {
                 return ((string)(this["OneNoteSection"]));
@@ -49,7 +49,19 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("race")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Feat Block (Normal)")]
+        public string BlockTemplatePageName {
+            get {
+                return ((string)(this["BlockTemplatePageName"]));
+            }
+            set {
+                this["BlockTemplatePageName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("feat")]
         public string BlockType {
             get {
                 return ((string)(this["BlockType"]));
@@ -61,121 +73,25 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Storm King\'s Thunder Bestiary 1.1.0.xml")]
-        public string BestiaryFile {
+        [global::System.Configuration.DefaultSettingValueAttribute("Feats.xml")]
+        public string DNDAppFileXML {
             get {
-                return ((string)(this["BestiaryFile"]));
+                return ((string)(this["DNDAppFileXML"]));
             }
             set {
-                this["BestiaryFile"] = value;
+                this["DNDAppFileXML"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Monster Block (Normal)")]
-        public string MonsterBlockTemplate {
+        [global::System.Configuration.DefaultSettingValueAttribute("[list] Alert, Medic")]
+        public string ElementsByName {
             get {
-                return ((string)(this["MonsterBlockTemplate"]));
+                return ((string)(this["ElementsByName"]));
             }
             set {
-                this["MonsterBlockTemplate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("PHB Spells 3.9.0.xml")]
-        public string SpellsFile {
-            get {
-                return ((string)(this["SpellsFile"]));
-            }
-            set {
-                this["SpellsFile"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Spell Block (Normal)")]
-        public string SpellBlockTemplate {
-            get {
-                return ((string)(this["SpellBlockTemplate"]));
-            }
-            set {
-                this["SpellBlockTemplate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Orc.xml")]
-        public string RacesFile {
-            get {
-                return ((string)(this["RacesFile"]));
-            }
-            set {
-                this["RacesFile"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Race Block (Normal)")]
-        public string RaceBlockTemplate {
-            get {
-                return ((string)(this["RaceBlockTemplate"]));
-            }
-            set {
-                this["RaceBlockTemplate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("UA Feats.xml")]
-        public string FeatsFile {
-            get {
-                return ((string)(this["FeatsFile"]));
-            }
-            set {
-                this["FeatsFile"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Feat Block (Normal)")]
-        public string FeatBlockTemplate {
-            get {
-                return ((string)(this["FeatBlockTemplate"]));
-            }
-            set {
-                this["FeatBlockTemplate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Backgrounds.xml")]
-        public string BackgroundsFile {
-            get {
-                return ((string)(this["BackgroundsFile"]));
-            }
-            set {
-                this["BackgroundsFile"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Background Block (Normal)")]
-        public string BackgroundBlockTemplate {
-            get {
-                return ((string)(this["BackgroundBlockTemplate"]));
-            }
-            set {
-                this["BackgroundBlockTemplate"] = value;
+                this["ElementsByName"] = value;
             }
         }
     }
