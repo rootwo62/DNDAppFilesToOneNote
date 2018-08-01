@@ -25,3 +25,12 @@ Steps to import monsters:
   - **MonsterBlockTemplate:** Monster Block (Normal)
   - **BlockType:** monster
 - Output pages should look like https://imgur.com/a/dVMrowW.
+
+_supported BlockTypes: monster, spell, race_
+
+Currently, the template table cells have to match the examples, the row order doesn't matter as much as the cell content.
+
+Template File Requirements:
+- [Race Block Template](https://imgur.com/a/sN1LTDY)
+- [Monster Block Template](https://imgur.com/a/czLz9Qp)
+- [Spell Block Template](https://imgur.com/a/9rrCI13)
