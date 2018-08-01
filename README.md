@@ -14,7 +14,7 @@ Requirements:
 3. NET 4.0+
 
 
-Steps to import monsters:
+Steps to import DNDAppFiles:
 - Create a notebook in onenote called 'DND Notebook'.
 - Create a section called 'Feats'.
 - Add a page called 'Feat Block (Normal).
