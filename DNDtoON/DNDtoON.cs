@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
+using System.Threading;
 using OneNote = Microsoft.Office.Interop.OneNote;
 
 
@@ -19,6 +20,8 @@ namespace DNDtoON
         const string font = @"<span style = 'font-size:9pt; font-family:cambria'>";
         const string boldfont = @"<span style = 'font-weight:bold; font-size:9pt; font-family:cambria'>";
         const string boldname = @"<span style = 'font-weight:bold; font-size:12pt; font-family:cambria'>";
+        const string tableheaderblack = @"<span style = 'color:#FFFFFF; font-weight:bold; font-size:9pt; font-family:cambria;'>";
+        const string tablefont = @"<span style = 'color:#000000; font-size:8pt; font-family:cambria;'>";
         const string italicfont = @"<span style='font-style:italic; font-size:9pt; font-family:cambria'>";
         const string bolditalicfont = @"<span style='font-style:italic; font-weight:bold; font-size:9pt; font-family:cambria'>";
         const string endspan = @"</span>";
@@ -35,52 +38,62 @@ namespace DNDtoON
 
         private void Run()
         {
-
-            string NamedList = Properties.Settings.Default.NamedList;
-            List<string> listofnames = new List<string> { };
-            string blocktype = Properties.Settings.Default.BlockType;
-            string templatexmlfile = blocktype + "templatefile.xml";
-            GetOneNoteTableXML(Properties.Settings.Default.BlockTemplatePageName, blocktype + "templatefile.xml");
-            XmlDocument xmldoc = new XmlDocument();
-            xmldoc.Load(Properties.Settings.Default.DNDAppFileXML);
-            XmlNodeList docnodes = null;
-
-            if (NamedList != null | NamedList != "")
+            try
             {
-                Console.WriteLine("getting elements by name...");
-                try
+                string NamedList = Properties.Settings.Default.NamedList;
+                List<string> listofnames = new List<string> { };
+                string blocktype = Properties.Settings.Default.BlockType;
+                string templatexmlfile = blocktype + "templatefile.xml";
+                GetOneNoteTableXML(Properties.Settings.Default.BlockTemplatePageName, blocktype + "templatefile.xml");
+                XmlDocument xmldoc = new XmlDocument();
+                xmldoc.Load(Properties.Settings.Default.DNDAppFileXML);
+                XmlNodeList docnodes = null;
+
+                if (NamedList != null & NamedList != "")
                 {
-                    foreach (string name in NamedList.Split(','))
+                    Console.WriteLine("getting elements by name...");
+                    try
                     {
-                        string nametoadd = name.Trim();
-                        listofnames.Add(nametoadd);
-                        Console.WriteLine("added {0} to the list of names", nametoadd);
+                        if (NamedList.Contains(","))
+                        {
+                            string[] names = NamedList.Split(',');
+                            foreach (string name in names)
+                            {
+                                string nametoadd = name.Trim();
+                                listofnames.Add(nametoadd);
+                                Console.WriteLine("added {0} to the list of names", nametoadd);
+                            }
+                        }
+                        else
+                            listofnames.Add(NamedList);
                     }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+
                 }
-                catch (Exception)
+
+                if (listofnames.Count > 0)
                 {
-                    throw;
+                    XmlDocument listnodes = new XmlDocument();
+                    XmlElement nodes = listnodes.CreateElement("compendium");
+
+                    foreach (string item in listofnames)
+                    {
+                        Console.WriteLine("loading {0} item", item);
+                        Console.ReadKey(true);
+                        XmlNode importnode = listnodes.ImportNode(xmldoc.SelectSingleNode("//" + blocktype + "[name[text()='" + item + "']]"), true);
+                        nodes.AppendChild(importnode);
+                    }
+
+                    docnodes = listnodes.AppendChild(nodes).ChildNodes;
+                    XDocument.Parse(listnodes.OuterXml).Save("HFDSJLKFHSLKDFHLK.xml");
                 }
-
-            }
-
-            if (listofnames.Count > 0)
-            {
-                XmlDocument listnodes = new XmlDocument();
-                XmlElement nodes = listnodes.CreateElement(blocktype + "s");
-
-                foreach (string item in listofnames)
+                else
                 {
-                    XmlNode importnode = listnodes.ImportNode(xmldoc.SelectSingleNode("//" + blocktype + "[name[text()='" + item + "']]"), true);
-                    nodes.AppendChild(importnode);
+                    docnodes = xmldoc.DocumentElement.GetElementsByTagName(blocktype);
                 }
-
-                docnodes = listnodes.AppendChild(nodes).ChildNodes;
-            }
-            else
-            {
-                docnodes = xmldoc.DocumentElement.GetElementsByTagName("race");
-            }
 
                 foreach (XmlNode node in docnodes)
                 {
@@ -98,8 +111,18 @@ namespace DNDtoON
                         FillFeatTable(node, pageID);
                     if (blocktype == "background")
                         FillBackgroundTable(node, pageID);
+                    if (blocktype == "class")
+                        FillClassTable(node, pageID);
 
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.ReadKey(true);
+                throw;
+            }
+            
         }
 
         private void GetONHeierarchy(string ID, OneNote.HierarchyScope OneNoteHierarchyScope, string OutputFile)
@@ -278,7 +301,6 @@ namespace DNDtoON
 
         // Fill Tables
 
-        
         private void FillMonsterStatsTable(XmlNode Monster, string MonsterPageID)
         {
 
@@ -878,6 +900,79 @@ namespace DNDtoON
 
         }
 
+        private void FillClassTable(XmlNode InputNode, string PageID)
+        {
+
+            OneNoteApp.GetHierarchy(PageID, OneNote.HierarchyScope.hsChildren, out string CurrentPage);
+            string URI = "http://schemas.microsoft.com/office/onenote/2013/onenote";
+
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.LoadXml(CurrentPage);
+            XmlNamespaceManager XNSMGR = XMLMGR(xmldoc);
+
+            string name = InputNode.SelectSingleNode("name")?.InnerText;
+            string hd = InputNode.SelectSingleNode("hd")?.InnerText;
+            string proficiency = InputNode.SelectSingleNode("proficiency")?.InnerText;
+            string spellAbility = InputNode.SelectSingleNode("spellAbility")?.InnerText;
+            string slots = InputNode.SelectSingleNode("slots")?.InnerText;
+            string feature = InputNode.SelectSingleNode("feature")?.InnerText;
+            string spellslots = InputNode.SelectSingleNode("//class[name[text()='" + name + "']]//slots")?.InnerText;
+
+            string HitDice = string.Format("{0} Hit Dice: {1}1d{2} per {3} level", boldfont, endspan, hd, name.ToLower());
+            string HitPoints = string.Format("{0} Hit Points at 1st Level: {1}{2} + your constitution modifier", boldfont, endspan, hd);
+            string HitPointsFuture = string.Format("{0} Hit Points at Higher Levels: {1}1d{2} + your Constitution modifier per {3} level after 1st", boldfont, endspan, hd, name.ToLower());
+
+            Console.WriteLine("current class = {0}", name);
+
+            if (name != null)
+                xmldoc.SelectSingleNode("//one:T[contains(text(), '[name]')]", XNSMGR).InnerText = boldname + name + endspan;
+            if (hd != null)
+                xmldoc.SelectSingleNode("//one:T[contains(text(), '[hd]')]", XNSMGR).InnerText = HitDice + Environment.NewLine + HitPoints + Environment.NewLine + HitPointsFuture;
+            if (proficiency != null)
+                xmldoc.SelectSingleNode("//one:T[contains(text(), '[proficiency]')]", XNSMGR).InnerText = boldfont + "Proficiencies: " + endspan + proficiency;
+            else
+            {
+                XmlNode node = xmldoc.SelectSingleNode("//one:T[contains(text(), '[proficiency]')]", XNSMGR);
+                node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
+            }
+
+            if (spellslots != null | spellslots != "")
+            {
+                string spellSlotsXPATH = string.Format("//class[name[contains(text(), '{0}')]]//autolevel[slots]", name);
+                SpellSlotTable(xmldoc, InputNode.SelectNodes(spellSlotsXPATH, XNSMGR), pageID);
+            }
+            else
+            {
+                XmlNode node = xmldoc.SelectSingleNode("//one:T[contains(text(), '[spellslots]')]", XNSMGR);
+                node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
+            }
+
+            if (spellAbility != null & spellAbility != "")
+                xmldoc.SelectSingleNode("//one:T[contains(text(), '[spellability]')]", XNSMGR).InnerText = boldfont + "Spell Ability: " + endspan + spellAbility;
+            else
+            {
+                XmlNode node = xmldoc.SelectSingleNode("//one:T[contains(text(), '[spellability]')]", XNSMGR);
+                node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
+            }
+
+            try
+            {
+                XDocument.Parse(xmldoc.OuterXml).Save("testfile.xml");
+                xmldoc.SelectSingleNode("//one:Outline/one:Size/@width", XNSMGR).InnerXml = "400";
+                OneNoteApp.UpdatePageContent(xmldoc.OuterXml);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("failed to update {0}", name);
+                Console.WriteLine(ex.Message);
+            }
+
+            OneNoteApp.SyncHierarchy(sectionID);
+
+            //Console.ReadKey(true);
+
+        }
+
         // Functions
 
         XmlNamespaceManager XMLMGR(XmlDocument InputXMLDocument)
@@ -1031,6 +1126,137 @@ namespace DNDtoON
             inputSize = inputSize.Replace("N", "Necromancy");
             inputSize = inputSize.Replace("U", "Universal");
             return inputSize;
+        }
+
+        private XmlNode SpellSlotTable(XmlDocument inputXMLDocument, XmlNodeList SpellSlotLevels, string pageID)
+        {
+
+            if (SpellSlotLevels.Count > 0)
+            {
+                Console.WriteLine("building spellslot table");
+                string URI = "http://schemas.microsoft.com/office/onenote/2013/onenote";
+                XmlNamespaceManager XNSMGR = XMLMGR(inputXMLDocument);
+                string name = inputXMLDocument.SelectSingleNode("//one:Title", XNSMGR).InnerText;
+
+                string xpathclassbyname = string.Format("//class[name[text()='{0}']]", name);
+
+                XmlNode Parent = inputXMLDocument.SelectSingleNode("//one:T[contains(text(), '[spellslots]')]/parent::one:OE/parent::one:OEChildren", XNSMGR);
+                XmlNode Table = inputXMLDocument.CreateElement("one:Table", URI);
+                XmlNode Columns = inputXMLDocument.CreateElement("one:Columns", URI);
+                XmlNode Column = null;
+                XmlNode Row = inputXMLDocument.CreateElement("one:Row", URI);
+                XmlNode Cell = null;
+                XmlNode OEChildren = null;
+                XmlNode OE = inputXMLDocument.CreateElement("one:OE", URI);
+                XmlNode T = inputXMLDocument.CreateElement("one:T", URI);
+                XmlNode OETable = inputXMLDocument.CreateElement("one:OE", URI);
+
+                XmlAttribute TableBorders = inputXMLDocument.CreateAttribute("bordersVisible");
+                TableBorders.Value = "true";
+                Table.Attributes.Append(TableBorders);
+
+                XmlNode slottext = SpellSlotLevels.Item(0).SelectSingleNode(xpathclassbyname + "/autolevel/slots");
+                string[] SpellSlots = slottext.InnerText.Split(',');
+                for (int i = 0; i < SpellSlots.Length; i++)
+                {
+                    Column = inputXMLDocument.CreateElement("one:Column", URI);
+                    XmlAttribute ColumnIndex = inputXMLDocument.CreateAttribute("index");
+                    XmlAttribute ColumnWidth = inputXMLDocument.CreateAttribute("width");
+                    ColumnIndex.Value = i.ToString();
+                    ColumnWidth.Value = "37.1100006103516";
+                    Column.Attributes.Append(ColumnIndex);
+                    Column.Attributes.Append(ColumnWidth);
+                    Columns.AppendChild(Column);
+                }
+
+                Table.AppendChild(Columns);
+
+                // add headers
+                List<string> headers = new List<string> { "Level", "Cantrips", "Slot 1", "Slot 2", "Slot 3", "Slot 4", "Slot 5", "Slot 6", "Slot 7", "Slot 8", "Slot 9" };
+                Row = inputXMLDocument.CreateElement("one:Row", URI);
+                int columnnumber = 0;
+                foreach (string header in headers)
+                {
+                   if (columnnumber <= SpellSlots.Length)
+                    {
+                        Cell = inputXMLDocument.CreateElement("one:Cell", URI);
+                        OEChildren = inputXMLDocument.CreateElement("one:OEChildren", URI);
+                        OE = inputXMLDocument.CreateElement("one:OE", URI);
+                        T = inputXMLDocument.CreateElement("one:T", URI);
+
+                        XmlAttribute CellShading = inputXMLDocument.CreateAttribute("shadingColor");
+                        CellShading.Value = "#000000";
+                        Cell.Attributes.Append(CellShading);
+
+                        T.InnerText = tableheaderblack + header + endspan;
+
+                        OE.AppendChild(T);
+                        OEChildren.AppendChild(OE);
+                        Cell.AppendChild(OEChildren);
+                        Row.AppendChild(Cell);
+                    }
+                    columnnumber++;
+                }
+
+                Table.AppendChild(Row);
+
+                int level = int.Parse(slottext.ParentNode.Attributes.GetNamedItem("level").Value);
+                Console.WriteLine("first level for {0} to get some spells is {1}", name, level);
+                foreach (XmlNode Level in SpellSlotLevels)
+                {
+                    Row = inputXMLDocument.CreateElement("one:Row", URI);
+
+                    slottext = Level.SelectSingleNode(xpathclassbyname + "//slots");
+                    
+
+                    Cell = inputXMLDocument.CreateElement("one:Cell", URI);
+                    XmlAttribute CellShading = inputXMLDocument.CreateAttribute("shadingColor");
+                    CellShading.Value = "#FFFFFF";
+                    Cell.Attributes.Append(CellShading);
+                    OEChildren = inputXMLDocument.CreateElement("one:OEChildren", URI);
+                    OE = inputXMLDocument.CreateElement("one:OE", URI);
+                    T = inputXMLDocument.CreateElement("one:T", URI);
+                    T.InnerText = tablefont + level.ToString() + endspan;
+                    OE.AppendChild(T);
+                    OEChildren.AppendChild(OE);
+                    Cell.AppendChild(OEChildren);
+                    Row.AppendChild(Cell);
+
+                    SpellSlots = slottext.InnerText.Split(',');
+
+                    foreach (string SpellSlot in SpellSlots)
+                    {
+                        string SpellSlotText = SpellSlot;
+
+                        if (SpellSlotText == "0")
+                            SpellSlotText = "-";
+
+                        Cell = inputXMLDocument.CreateElement("one:Cell", URI);
+                        CellShading = inputXMLDocument.CreateAttribute("shadingColor");
+                        CellShading.Value = "#FFFFFF";
+                        Cell.Attributes.Append(CellShading);
+                        OEChildren = inputXMLDocument.CreateElement("one:OEChildren", URI);
+                        OE = inputXMLDocument.CreateElement("one:OE", URI);
+                        T = inputXMLDocument.CreateElement("one:T", URI);
+                        T.InnerText = tablefont + SpellSlotText + endspan;
+                        OE.AppendChild(T);
+                        OEChildren.AppendChild(OE);
+                        Cell.AppendChild(OEChildren);
+                        Row.AppendChild(Cell);
+                    }
+                    level++;
+                    Table.AppendChild(Row);
+                }
+
+                OETable.AppendChild(Table);
+                Parent.InsertBefore(OETable, Parent.FirstChild);
+                Parent.RemoveChild(Parent.SelectSingleNode("//one:T[contains(text(), '[spellslots]')]/parent::one:OE", XNSMGR));
+                XDocument.Parse(inputXMLDocument.OuterXml).Save("newtableforspellslots.xml");
+
+                OneNoteApp.UpdatePageContent(inputXMLDocument.OuterXml);
+                OneNoteApp.SyncHierarchy(pageID);
+            }
+            return null;
         }
 
     }
