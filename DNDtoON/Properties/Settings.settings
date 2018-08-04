@@ -17,8 +17,8 @@
     <Setting Name="DNDAppFileXML" Type="System.String" Scope="User">
       <Value Profile="(Default)">Feats.xml</Value>
     </Setting>
-    <Setting Name="NamedList" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Alert, Medic</Value>
+    <Setting Name="SlowProcess" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

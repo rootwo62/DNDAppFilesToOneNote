@@ -85,13 +85,13 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Alert, Medic")]
-        public string NamedList {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SlowProcess {
             get {
-                return ((string)(this["NamedList"]));
+                return ((bool)(this["SlowProcess"]));
             }
             set {
-                this["NamedList"] = value;
+                this["SlowProcess"] = value;
             }
         }
     }
