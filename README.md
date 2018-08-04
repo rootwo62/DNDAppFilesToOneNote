@@ -26,13 +26,14 @@ Steps to import DNDAppFiles:
   - **BlockTemplatePageName:** Feat Block (Normal)
   - **BlockType:** feat
   - **DNDAppFileXML:** Feats.xml
-  - **NamedList:** Actor, Alert
+  - **SlowProcess:** True
   
 
 Output pages should look like https://imgur.com/a/dVMrowW.
 
-_supported BlockTypes: monster, spell, race, background, feat_
-_leave __NamedList__ setting blank to get all items in xml document_
+supported BlockTypes: monster, spell, race, background, feat
+
+**SlowProcess** set to false or anything but true will run all processes at once.
 
 Currently, the template table cells have to match the examples, the row order doesn't matter as much as the values between the brackets.
 
