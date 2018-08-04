@@ -31,7 +31,7 @@ Steps to import DNDAppFiles:
 
 Output pages should look like https://imgur.com/a/dVMrowW.
 
-supported BlockTypes: monster, spell, race, background, feat
+**BlockTypes:** monster, spell, race, background, feat
 
 **SlowProcess** set to false or anything but true will run all processes at once.
 
