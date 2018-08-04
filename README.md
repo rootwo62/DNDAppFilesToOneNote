@@ -17,7 +17,7 @@ Requirements:
 Steps to import DNDAppFiles:
 - Create a notebook in onenote called 'DND Notebook'.
 - Create a section called 'Feats'.
-- Add a page called 'Feat Block (Normal).
+- Add a page called 'Feat Block (Normal)'.
 - Make a table that looks like [Feat Block Template](https://imgur.com/a/KuizSFr).
 - Update the app config file to reference the notebook, section, templatepage, and file to import.
 
