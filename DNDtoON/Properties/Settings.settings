@@ -2,23 +2,29 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DNDtoON.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Notebook" Type="System.String" Scope="User">
-      <Value Profile="(Default)">DND Notebook</Value>
+    <Setting Name="ONRootPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DND Notebook/Monsters</Value>
     </Setting>
-    <Setting Name="Section" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Feats</Value>
+    <Setting Name="ONSection" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Monster Tacos</Value>
     </Setting>
-    <Setting Name="BlockTemplatePageName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Feat Block (Normal)</Value>
+    <Setting Name="ONBlockTemplatePageName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Monster Block (Initiative)</Value>
     </Setting>
     <Setting Name="BlockType" Type="System.String" Scope="User">
-      <Value Profile="(Default)">feat</Value>
+      <Value Profile="(Default)">monster</Value>
     </Setting>
     <Setting Name="DNDAppFileXML" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Feats.xml</Value>
+      <Value Profile="(Default)">compendium.xml</Value>
     </Setting>
     <Setting Name="SlowProcess" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CopyPageToSourceBookSection" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Debug" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

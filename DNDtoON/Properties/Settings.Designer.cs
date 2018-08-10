@@ -25,43 +25,43 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DND Notebook")]
-        public string Notebook {
+        [global::System.Configuration.DefaultSettingValueAttribute("DND Notebook/Monsters")]
+        public string ONRootPath {
             get {
-                return ((string)(this["Notebook"]));
+                return ((string)(this["ONRootPath"]));
             }
             set {
-                this["Notebook"] = value;
+                this["ONRootPath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Feats")]
-        public string Section {
+        [global::System.Configuration.DefaultSettingValueAttribute("Monster Tacos")]
+        public string ONSection {
             get {
-                return ((string)(this["Section"]));
+                return ((string)(this["ONSection"]));
             }
             set {
-                this["Section"] = value;
+                this["ONSection"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Feat Block (Normal)")]
-        public string BlockTemplatePageName {
+        [global::System.Configuration.DefaultSettingValueAttribute("Monster Block (Initiative)")]
+        public string ONBlockTemplatePageName {
             get {
-                return ((string)(this["BlockTemplatePageName"]));
+                return ((string)(this["ONBlockTemplatePageName"]));
             }
             set {
-                this["BlockTemplatePageName"] = value;
+                this["ONBlockTemplatePageName"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("feat")]
+        [global::System.Configuration.DefaultSettingValueAttribute("monster")]
         public string BlockType {
             get {
                 return ((string)(this["BlockType"]));
@@ -73,7 +73,7 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Feats.xml")]
+        [global::System.Configuration.DefaultSettingValueAttribute("compendium.xml")]
         public string DNDAppFileXML {
             get {
                 return ((string)(this["DNDAppFileXML"]));
@@ -85,13 +85,37 @@ namespace DNDtoON.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool SlowProcess {
             get {
                 return ((bool)(this["SlowProcess"]));
             }
             set {
                 this["SlowProcess"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CopyPageToSourceBookSection {
+            get {
+                return ((bool)(this["CopyPageToSourceBookSection"]));
+            }
+            set {
+                this["CopyPageToSourceBookSection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Debug {
+            get {
+                return ((bool)(this["Debug"]));
+            }
+            set {
+                this["Debug"] = value;
             }
         }
     }
