@@ -21,12 +21,14 @@ Steps to import DNDAppFiles:
 - Make a table that looks like [Feat Block Template](https://imgur.com/a/KuizSFr).
 - Update the app config file to reference the notebook, section, templatepage, and file to import.
 
-  - **Notebook:** DND Notebook
-  - **Section:** Feats
-  - **BlockTemplatePageName:** Feat Block (Normal)
+  - **ONRootPath:** DND Notebook
+  - **ONSection:** Feats
+  - **ONBlockTemplatePageName:** Feat Block (Normal)
   - **BlockType:** feat
   - **DNDAppFileXML:** Feats.xml
-  - **SlowProcess:** True
+  - **SlowProcess:** false
+  - **CopyPageToSourceBookSection:** true
+  - **Debug:** false
   
 
 Output pages should look like https://imgur.com/a/dVMrowW.
@@ -34,6 +36,12 @@ Output pages should look like https://imgur.com/a/dVMrowW.
 **BlockTypes:** monster, spell, race, background, feat
 
 **SlowProcess** set to false or anything but true will run all processes at once.
+
+**CopyPageToSourceBookSection** set to true will look for an element called <type> and split it by the commas using the second comma as the "Source" book.  
+  
+  - _e.g. humanoid (aarakocra), monster manual_ 
+  - _if no source is found the **ONSection** will be used._
+  - _If the specified section doesn't exsist in the root it will be created_
 
 Currently, the template table cells have to match the examples, the row order doesn't matter as much as the values between the brackets.
 
