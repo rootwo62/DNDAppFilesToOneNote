@@ -4,8 +4,10 @@ Convert DND App Files to OneNote
 This app is very fresh and rough.  It takes the files ceryliae created for the Lion's Gate Apps and imports them into OneNote.
 ceryliae github is https://github.com/ceryliae.
 
-I was inspired to do this after using the onenote package crydid created that contains tons of DND content.  His website is
-http://www.cryrid.com/digitaldnd/.
+I was inspired to do this after using the onenote package **crydid** created that contains tons of DND content.  His website is
+http://www.cryrid.com/digitaldnd/.  I really liked the layout, but wanted to tailor the templates to my liking, without manually updating every monster.  
+
+With this app you will be able to import files from [Ceryliae's repo](https://github.com/ceryliae) directly into Microsoft OneNote. Most errors occur from template formatting and the app files missing some element.  The debug setting will export page xml files to allow you to review and compare OneNote XML structures.
 
 
 Requirements:
