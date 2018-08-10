@@ -33,6 +33,10 @@ Steps to import DNDAppFiles:
 
 Output pages should look like https://imgur.com/a/dVMrowW.
 
+**ONRootPath** can be split with a / to indicated a section group
+
+ - _e.g. DND Notebook/Monsters_
+
 **BlockTypes:** monster, spell, race, background, feat
 
 **SlowProcess** set to false or anything but true will run all processes at once.
