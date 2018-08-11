@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.IO;
 
+
 namespace DNDtoON
 {
     class Application
@@ -38,18 +39,13 @@ namespace DNDtoON
         {
             Console.Title = ConsoleTitle;
             Application Application = new Application();
+            //Application.Run();
             Application.Run();
 
             //Application.Run();
 
             Console.WriteLine("press any key to close...");
             Console.ReadKey(true);
-        }
-
-        private void test()
-        {
-            OneNoteApp.GetHierarchy(OneNoteApp.Windows.CurrentWindow.CurrentSectionGroupId, OneNote.HierarchyScope.hsChildren, out string currentsection);
-            XDocument.Parse(currentsection).Save("debug-currentview.xml");
         }
 
         private void Run()
@@ -76,7 +72,6 @@ namespace DNDtoON
                 currentElementIndex++;
                 string newtitle = string.Format("{0} | {1}/{2}", ConsoleTitle, currentElementIndex, xdocCompendiumCount);
                 Console.Title = newtitle;
-
 
                 if (Properties.Settings.Default.CopyPageToSourceBookSection)
                     SetSection(SourceBook(element.Descendants("type").First().Value, sectionname), rootID);
@@ -268,7 +263,6 @@ namespace DNDtoON
             XmlNode Table = MonsterPageXMLDoc.SelectSingleNode("//one:Table", XNSMGR);
 
             // single child nodes
-
             string name = Monster.SelectSingleNode("//name")?.InnerText;
             string size = Monster.SelectSingleNode("//size")?.InnerText;
             string type = Monster.SelectSingleNode("//type")?.InnerText;
@@ -361,86 +355,36 @@ namespace DNDtoON
                 // saving throws
                 if (save != null & save != "")
                     MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[saving throws]')]", XNSMGR).InnerText = boldfont + @"Saving Throws: " + endspan + save;
-                else
-                {
-                    XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[saving throws]')]", XNSMGR);
-                    node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
-                }
                 // skills
                 if (skill != null & skill != "")
                     MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[skills]')]", XNSMGR).InnerText = boldfont + @"Skills: " + endspan + skill;
-                else
-                {
-                    XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[skills]')]", XNSMGR);
-                    node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
-                }
                 // resist
                 if (resist != null & resist != "")
                     MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[resist]')]", XNSMGR).InnerText = boldfont + @"Resistance: " + endspan + resist;
-                else
-                {
-                    XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[resist]')]", XNSMGR);
-                    node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
-                }
                 // immune
                 if (immune != null & immune != "")
                     MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[immune]')]", XNSMGR).InnerText = boldfont + @"Damage Immunities: " + endspan + immune;
-                else
-                {
-                    XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[immune]')]", XNSMGR);
-                    node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
-                }
                 // condition immunities
                 if (conditionimmune != null & conditionimmune != "")
                     MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[condition immunities]')]", XNSMGR).InnerText = boldfont + @"Condition Immunities: " + endspan + conditionimmune;
-                else
-                {
-                    XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[condition immunities]')]", XNSMGR);
-                    node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
-                }
                 // passive
                 if (passive != null & passive != "")
                     MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[passive]')]", XNSMGR).InnerText = boldfont + @"Passive Perception: " + endspan + passive;
-                else
-                {
-                    XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[passive]')]", XNSMGR);
-                    node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
-                }
                 // senses
                 if (senses != null & senses != "")
                     MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[senses]')]", XNSMGR).InnerText = boldfont + @"Senses: " + endspan + senses;
-                else
-                {
-                    XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[senses]')]", XNSMGR);
-                    node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
-                }
                 // languages
                 if (languages != null & languages != "")
                     MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[languages]')]", XNSMGR).InnerText = boldfont + @"Languages: " + endspan + languages;
-                else
-                {
-                    XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[languages]')]", XNSMGR);
-                    node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
-                }
                 // challenge rating
                 if (cr != null & cr != "")
                     MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[cr]')]", XNSMGR).InnerText = boldfont + @"Challenge: " + endspan + cr;
-                else
-                {
-                    XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[cr]')]", XNSMGR);
-                    node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
-                }
                 // enviornment
                 if (enviornment != null)
                     MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[environment]')]", XNSMGR).InnerText = enviornment;
                 // spells
                 if (spells != null & spells != "")
                     MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[spells]')]", XNSMGR).InnerText = boldfont + @"Spells: " + endspan + spells;
-                else
-                {
-                    XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[spells]')]", XNSMGR);
-                    node.ParentNode.ParentNode.ParentNode.ParentNode.ParentNode.RemoveChild(node.ParentNode.ParentNode.ParentNode.ParentNode);
-                }
                 // traits
                 if (traits != null)
                 {
@@ -485,8 +429,14 @@ namespace DNDtoON
                 }
                 MonsterPageXMLDoc.SelectSingleNode("//one:Outline/one:Size/@width", XNSMGR).InnerXml = "400";
 
-                XDocument.Parse(MonsterPageXMLDoc.OuterXml).Save("output-monsterpagexmldoc.xml");
+                foreach (XmlNode node in MonsterPageXMLDoc.SelectNodes("//one:T", XNSMGR))
+                {
+                    if (node.InnerText.StartsWith("[") & node.InnerText.EndsWith("]"))
+                        node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
+                }
 
+
+                XDocument.Parse(MonsterPageXMLDoc.OuterXml).Save("output-monsterpagexmldoc.xml");
                 OneNoteApp.UpdatePageContent(MonsterPageXMLDoc.OuterXml);
             }
             catch (Exception ex)
