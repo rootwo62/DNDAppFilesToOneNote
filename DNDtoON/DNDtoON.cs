@@ -58,7 +58,12 @@ namespace DNDtoON
             string templatexmlfile = blocktype + "templatefile.xml";
             GetOneNoteTableXML(Properties.Settings.Default.ONBlockTemplatePageName, templatexmlfile);
 
-            Console.WriteLine("ROOT: {1}{0}INITIAL SECTION: {2}{0}COMPENDIUM: {3}{0}Press any key to continue...{0}", Environment.NewLine, Properties.Settings.Default.ONRootPath, sectionname, Compendium);
+            Console.WriteLine("ROOT: {1}{0}INITIAL SECTION: {2}{0}COMPENDIUM: {3}{0}Press any key to continue...{0}", 
+                Environment.NewLine, 
+                Properties.Settings.Default.ONRootPath, 
+                sectionname, 
+                Compendium);
+
             Console.ReadKey(true);
 
             int xdocCompendiumCount = xdocCompendium.Descendants(blocktype).Count();
@@ -295,8 +300,8 @@ namespace DNDtoON
             //Console.ReadKey(true);
             size = MonsterSize(size);
 
-            try
-            {
+            //try
+            //{
                 // initiative outline
                 if (MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), 'Initiative')]", XNSMGR) != null)
                 {
@@ -427,30 +432,37 @@ namespace DNDtoON
                     XmlNode node = MonsterPageXMLDoc.SelectSingleNode("//one:T[contains(text(), '[legendary]')]", XNSMGR);
                     node.ParentNode.ParentNode.ParentNode.ParentNode.ParentNode.RemoveChild(node.ParentNode.ParentNode.ParentNode.ParentNode);
                 }
+
                 MonsterPageXMLDoc.SelectSingleNode("//one:Outline/one:Size/@width", XNSMGR).InnerXml = "400";
 
                 foreach (XmlNode node in MonsterPageXMLDoc.SelectNodes("//one:T", XNSMGR))
                 {
                     if (node.InnerText.StartsWith("[") & node.InnerText.EndsWith("]"))
-                        node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
-                }
+                    {
+                        // check if cell has more than one variable
+                        if (node.ParentNode.ParentNode.ChildNodes.Count > 1)
+                            node.ParentNode.ParentNode.RemoveChild(node.ParentNode);
+                        else
+                            node.InnerText = "none";
 
+                    }
+                }
 
                 XDocument.Parse(MonsterPageXMLDoc.OuterXml).Save("output-monsterpagexmldoc.xml");
                 OneNoteApp.UpdatePageContent(MonsterPageXMLDoc.OuterXml);
-            }
-            catch (Exception ex)
-            {
-                if (debug)
-                {
-                    if (!Directory.Exists("errors"))
-                        Directory.CreateDirectory("errors");
-                    XDocument.Parse(MonsterPageXMLDoc.OuterXml).Save("errors/" + name + "-onenote.xml");
-                    XDocument.Parse(Monster.OuterXml).Save("errors/" + name + "-monster.xml");
-                }
-                Console.WriteLine("failed to update {0}", name);
-                Console.WriteLine(ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    if (debug)
+            //    {
+            //        if (!Directory.Exists("errors"))
+            //            Directory.CreateDirectory("errors");
+            //        XDocument.Parse(MonsterPageXMLDoc.OuterXml).Save("errors/" + name + "-onenote.xml");
+            //        XDocument.Parse(Monster.OuterXml).Save("errors/" + name + "-monster.xml");
+            //    }
+            //    Console.WriteLine("failed to update {0}", name);
+            //    Console.WriteLine(ex.Message);
+            //}
 
             OneNoteApp.SyncHierarchy(sectionID);
 
@@ -1246,7 +1258,6 @@ namespace DNDtoON
 
                     slottext = Level.SelectSingleNode(xpathclassbyname + "//slots");
 
-
                     Cell = inputXMLDocument.CreateElement("one:Cell", URI);
                     XmlAttribute CellShading = inputXMLDocument.CreateAttribute("shadingColor");
                     CellShading.Value = "#FFFFFF";
@@ -1319,6 +1330,7 @@ namespace DNDtoON
             OneNoteApp.GetHierarchy(rootID, OneNote.HierarchyScope.hsSections, out string sectionsxml);
             XDocument xdoc = XDocument.Parse(sectionsxml);
             xdoc.Save(sectionsxmlfile);
+
 
             try
             {
